@@ -15,8 +15,7 @@ usr/share/keyrings/postgresql.gpg
 
 echo deb [arch=amd64,arm64,ppc64el signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main | sudo tee /etc/apt/sources.list.d/postgresql.list
 
-echo deb [arch=amd64,arm64,ppc64el signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg-testing main | sudo tee /etc/apt/sources.list.d/postgresql-testing.list
-
+sudo apt install postgresql-client postgresql -y
 
 -----------------------
 #Comandos de servicio para PostgreSQL
@@ -39,7 +38,17 @@ exit
 
 # Gestion de Usuarios
 
-sudo su - postgres -c "createuser <name>"
+Dentro de psql
+CREATE USER <nombreusuario>
+ALTER ROLE <nombreusuario> CREATEDB;
+
+# Crear Base de dato de prueba : Practica
+CREATE DATABASE Practica;
+
+Nos Conectamos a la base creada
+
+\c practica
+
 
 Crear bbdd para el usuario nuevo
 sudo su - postgres -c "createdb <namedb>"
@@ -47,4 +56,11 @@ sudo -u postgres psql
 
 GRANT ALL PRIVILEGES ON DATABASE <usernamedb> TO <name>;
 
+
+-----------------
+
+# Instalacion de driver
+
+En caso de que la instalacion de psycopg2 falle se puede proceder con
+pip install psycopg2-binary
 
