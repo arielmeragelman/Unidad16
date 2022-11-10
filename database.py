@@ -7,35 +7,45 @@ from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 
 
-
 class Database():
-    # Creamos la clase para la conexion a la base de datos
+    """Database Clase para setear la conexion a la base de datos
+       y los metodos definen los procedimientos que podemos realizar con la
+       tabla customers
+       Metodos: fetchByQuery | saveData | updateCustomer |
+                deleteCustomer | fetchUserByName | fetchAllUsers
 
-    engine = db.create_engine('postgresql://meragelman:sebastian@localhost/practica')
-    Session = sessionmaker(bind=engine)    
+    """
+    # Creamos la conexion a la base de datos y el objeto session
+    engine = db.create_engine(
+        'postgresql://meragelman:sebastian@localhost/practica')
+    Session = sessionmaker(bind=engine)
     session = Session()
-        
-
 
     def __init__(self):
+        """__init__ Conectamos con un pool del objeto engine
+        """
 
         self.connection = self.engine.connect()
         print("instancia de conexion realizada")
 
-
-
     def fetchByQuery(self, query: str) -> None:
-        #Lanza una consulta SQL a todas las columnas de la tabla ingresada
-        
-        fetchQuery = self.connection.execute(f"SELECT * FROM {query}")
+        """fetchByQuery Obtengo todos los registros con todas las columnas
+                        para la tabla de interes
 
+        :param query: tabla a consultar
+        :type query: str
+        """
+
+        # Ejecuto la consulta contra la tabla y luego retorno los resultados
+        fetchQuery = self.connection.execute(f"SELECT * FROM {query}")
         for data in fetchQuery.fetchall():
             print(data)
 
-
-
-    def saveData(self,customer):
-        self.connection.execute(f"""INSERT INTO customer(name,age,email,address,zip_code) VALUES( '{customer.name}','{customer.age}','{customer.email}','{customer.address}','{customer.zip_code}')""")
+    def saveData(self, customer: list) -> None:
+        self.connection.execute(
+            f"""INSERT INTO customer(name,age,email,address,zip_code) VALUES( '
+            {customer.name}','{customer.age}','{customer.email}','
+            {customer.address}','{customer.zip_code}')""")
 
         self.session.add(customer)
         self.session.commit()
